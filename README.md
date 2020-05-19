@@ -1,10 +1,10 @@
-Antecedent Rainfall Calculator
+  # Antecedent Rainfall Calculator
 
-What is it?
+## What is it?
 
-Automation tool that evaluates three climatological parameters to assist in the making and documenting of various determinations required by policy for the execution of USACE&#39;s Regulatory Program.
+An automation tool that evaluates three climatological parameters to assist in the making and documenting of various determinations required by policy for the execution of USACE&#39;s Regulatory Program.
 
-Usage
+## Usage
 
 Rapidly, accurately, and effortlessly determine whether any of the following problematic circumstances exist for a given Latitude, Longitude, and Date:
 
@@ -14,7 +14,7 @@ Rapidly, accurately, and effortlessly determine whether any of the following pro
 - Greater than normal antecedent precipitation
 - Automatically document the basis of these decisions for the administrative record.
 
-Utility
+## Utility
 
 - **Site Visit:** Determine whether you should use the problematic circumstances portion of the delineation manual and regional supplement
 - **Data Sheet Review:** Determine whether the applicant or their agent should have used the problematic circumstances portion of the delineation manual and regional supplement
