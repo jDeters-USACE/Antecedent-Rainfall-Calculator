@@ -48,13 +48,20 @@ from win32api import GetFileVersionInfo, LOWORD, HIWORD
 # Import Custom Libraries
 try:
     from . import JLog
-    from . import os_convenience
 except Exception:
     import JLog
-    import os_convenience
 
 MODULE_PATH = os.path.dirname(os.path.realpath(__file__))
 ROOT_PATH = os.path.dirname(os.path.dirname(MODULE_PATH))
+
+def delete_read_only(file_path):
+    """Deletes read-only files by changing their properties and retrying"""
+    try:
+        os.remove(file_path)
+    except Exception:
+        os.chmod(file_path, stat.S_IWRITE)
+        os.remove(file_path)
+# End of delete_read_only function
 
 def sizeof_fmt(num, suffix='B'):
     for unit in [' ', 'K', 'M', 'G', 'T', 'P', 'E', 'Z']:
@@ -101,7 +108,7 @@ def get_chrome_driver_path():
         driver_file_size = os.path.getsize(chrome_driver_path)
         if driver_file_size < 8036096:
             log.Wrap('Chrome binary corrupt (Less than 8036096 bytes), deleting...')
-            os_convenience.delete_read_only(chrome_driver_path)
+            delete_read_only(chrome_driver_path)
             driver_exists = False
     if not driver_exists:
         # Download chrome driver from Google
@@ -130,7 +137,10 @@ def download_chrome_driver(chrome_version, chrome_driver_path):
     # Ensure download directory exists
     download_directory = os.path.split(chrome_driver_path)[0]
     log.Wrap('Ensuring download directory ({}) exists...'.format(download_directory))
-    os_convenience.ensure_dir(download_directory)
+    try:
+        os.makedirs(download_directory)
+    except Exception:
+        pass
     # Define temporary zip path
     chrome_zip_path = '{}\\chromedriver_win32.zip'.format(download_directory)
     # Download chrome binary
@@ -163,7 +173,7 @@ def download_chrome_driver(chrome_version, chrome_driver_path):
                 log.Wrap(' Chrome binary corrupt, deleting...')
                 log.Wrap('  Binary file size   = {} bytes'.format(driver_file_size))
                 log.Wrap('  Expected file size > {} bytes'.format(minimum_bytes))
-                os_convenience.delete_read_only(chrome_zip_path)
+                delete_read_only(chrome_zip_path)
             else:
                 with zipfile.ZipFile(chrome_zip_path, 'r') as zip_ref:
                     zip_ref.extractall(download_directory)

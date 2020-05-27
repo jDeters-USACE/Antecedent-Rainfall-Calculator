@@ -39,8 +39,10 @@ from win32api import GetFileVersionInfo, LOWORD, HIWORD
 # Import Custom Libraries
 try:
     from . import JLog
+    from . import get_chromedriver
 except Exception:
     import JLog
+    import get_chromedriver
 
 def get_chrome_version():
     """Gets the major, minor and build versions of the local Google Chrome installation"""
@@ -87,7 +89,7 @@ class getJSON(object):
     def Chrome(self):
         self.L.Wrap('Attempting to open Google Chrome in headless mode...')
         # Set Driver Path for Chrome
-        self.chrome_driver_path = "{}\\webDrivers\\Chrome\\chromedriver.exe".format(self.module_path)
+        self.chrome_driver_path = get_chromedriver.get_chrome_driver_path()
         # Create Selenium Chrome Options class
         self.chrome_options = webdriver.ChromeOptions()
         # Populate class with Chrome Options (supposedly increase stability)
@@ -141,7 +143,7 @@ def global_elev_query(lat, lon, units='Feet'):
     # Locate Chrome Binary
     module_path = os.path.dirname(os.path.realpath(__file__))
     log.Wrap('Locating Chrome binary...')
-    chrome_driver_path = "{}\\webDrivers\\Chrome\\{}\\chromedriver.exe".format(module_path, chrome_version)
+    chrome_driver_path = get_chromedriver.get_chrome_driver_path()
     log.Wrap('Chrome binary = {}'.format(chrome_driver_path))
     # Create Options object and set automation options
     chrome_options = webdriver.ChromeOptions()

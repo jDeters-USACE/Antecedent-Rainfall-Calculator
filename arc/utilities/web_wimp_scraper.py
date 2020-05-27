@@ -80,11 +80,9 @@ from win32api import GetFileVersionInfo, LOWORD, HIWORD
 try:
     from . import JLog
     from . import get_chromedriver
-    from . import os_convenience
 except Exception:
     import JLog
     import get_chromedriver
-    import os_convenience
 
 def get_chrome_version():
     """Gets the major, minor and build versions of the local Google Chrome installation"""
@@ -625,11 +623,12 @@ class WimpScraper(object):
         Checks for local copies before scraping WebWIMP and calculating
         the Dry/Wet Season per the instructions in the Regional Supplement.
         """
+        error_messages = ['LARGE WATER BODY', 'PERMANENT SNOW COVER', 'ERROR']
         rows_needed = False
         self.log.print_section('Web WIMP - Web-based Water-Budget Interactive Modeling Program')
-        self.log.Wrap('Scraping WebWIMP at {},{}...'.format(lat, lon))
         lat = round(lat, 1)
         lon = round(lon, 1)
+        self.log.Wrap('Scraping WebWIMP at {},{}...'.format(lat, lon))
         try:
 #            # First check to see if we already have rows
 #            self.log.Wrap(' Checking for existing data...')
@@ -642,6 +641,40 @@ class WimpScraper(object):
             wimp_dict_key = '{},{}'.format(lat, lon)
             try:
                 self.rows = self.wimp_dict[wimp_dict_key]
+                if self.rows in error_messages:
+                    self.log.Write(' {}'.format(self.rows))
+                    self.log.Wrap(' No data found at {},{}. Trying an adjacent point.'.format(lat, lon))
+                    lat_a = lat + 0.1
+                    lon_a = lon
+                    self.log.Wrap('Scraping WebWIMP at {},{}...'.format(lat_a, lon_a))
+                    wimp_dict_key = '{},{}'.format(lat_a, lon_a)
+                    self.rows = self.wimp_dict[wimp_dict_key]
+                    if self.rows in error_messages:
+                        self.log.Write(' {}'.format(self.rows))
+                        self.log.Wrap(' No data found at {},{}. Trying another adjacent point.'.format(lat_a, lon_a))
+                        lat_a = lat - 0.1
+                        lon_a = lon
+                        self.log.Wrap('Scraping WebWIMP at {},{}...'.format(lat_a, lon_a))
+                        wimp_dict_key = '{},{}'.format(lat_a, lon_a)
+                        self.rows = self.wimp_dict[wimp_dict_key]
+                        if self.rows in error_messages:
+                            self.log.Write(' {}'.format(self.rows))
+                            self.log.Wrap(' No data found at {},{}. Trying another adjacent point.'.format(lat_a, lon_a))
+                            lat_a = lat
+                            lon_a = lon + 0.1
+                            self.log.Wrap('Scraping WebWIMP at {},{}...'.format(lat_a, lon_a))
+                            wimp_dict_key = '{},{}'.format(lat_a, lon_a)
+                            self.rows = self.wimp_dict[wimp_dict_key]
+                            if self.rows in error_messages:
+                                self.log.Write(' {}'.format(self.rows))
+                                self.log.Wrap(' No data found at {},{}. Trying final adjacent point.'.format(lat_a, lon_a))
+                                lat_a = lat
+                                lon_a = lon - 0.1
+                                self.log.Wrap('Scraping WebWIMP at {},{}...'.format(lat_a, lon_a))
+                                wimp_dict_key = '{},{}'.format(lat_a, lon_a)
+                                self.rows = self.wimp_dict[wimp_dict_key]
+                                if self.rows in error_messages:
+                                    self.log.Write(' {}'.format(self.rows))
                 season = get_season_from_rows(self.rows, month)
                 self.log.print_separator_line()
                 self.log.Write('')
@@ -709,14 +742,14 @@ if __name__ == '__main__':
     LON = -156.7
     FOLDER = r'D:\Code\Python\WinPythonARC_2\cached\WebWIMP\71.3, -156.7'
     WIMP_SCRAPER = WimpScraper()
-    WIMP_SCRAPER.get_season(lat=71.3,
-                            lon=-156.7,
-                            month=12,
+    WIMP_SCRAPER.get_season(lat=30.442473,
+                            lon=-90.268631,
+                            month=11,
                             watershed_analysis=True)
-    WIMP_SCRAPER.get_season(lat=38.5,
-                            lon=-121.5,
-                            month=7,
-                            watershed_analysis=True)
+    WIMP_SCRAPER.get_season(lat=30.442473,
+                            lon=-90.268631,
+                            month=11,
+                            watershed_analysis=False)
 
 
 
