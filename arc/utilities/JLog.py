@@ -18,7 +18,7 @@
 ##  ------------------------------- ##
 ##      Copyright: Jason Deters     ##
 ##  ------------------------------- ##
-##    Last Edited on:  2020-05-18   ##
+##    Last Edited on:  2020-05-27   ##
 ##  ------------------------------- ##
 ######################################
 
@@ -42,7 +42,7 @@ def ensure_dir(folder):
     """Ensures entire directory structure given exists"""
     try:
         os.makedirs(folder)
-    except WindowsError:
+    except Exception:
         pass
 # End of ensure_dir function
 

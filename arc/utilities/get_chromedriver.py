@@ -18,7 +18,7 @@
 ##  ------------------------------- ##
 ##      Copyright: Jason Deters     ##
 ##  ------------------------------- ##
-##    Last Edited on:  2020-05-18   ##
+##    Last Edited on:  2020-05-27   ##
 ##  ------------------------------- ##
 ######################################
 
@@ -38,6 +38,7 @@ import os
 import sys
 import shutil
 import time
+import stat
 
 # Import Third-Party Libraries
 import zipfile
