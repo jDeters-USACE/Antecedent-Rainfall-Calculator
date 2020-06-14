@@ -111,6 +111,19 @@ class PrintLog(object):
         self.LogOnly = Boolean
         return
 
+    def write_error_log(self):
+        error_log_path = "{}\\Logs\\Antecedent_LOG.txt".format(ROOT_FOLDER)
+        with open(error_log_path, 'w') as error_log:
+            error_log.write(' \n')
+            error_log.write('Please email this document to APT-Report-Issue@usace.army.mil to assist with your Error Report\n')
+            error_log.write(' \n')
+            with open(self.Log, 'r') as log_file:
+                for line in log_file:
+                    error_log.write(line)
+                    sys.stdout.flush()
+        return error_log_path
+
+
     def Write(self, message):
         # Ensure we completely overwrite any '\r' lines
         if self.prevMsgLen is not None:
@@ -228,8 +241,15 @@ class PrintLog(object):
         return
 
     def send_log(self):
-        recipient = 'Jason.Deters@usace.army.mil'
-        subject = 'Antecedent Rainfall Calculator Error Log'
+        """
+        If Outlook Installed:
+        Drafts and email with the current error log as an attachment directed to me
+
+        If Outlook Not Installed:
+        Opens the Error Log and requests that users transmit it with their error report.
+        """
+        recipient = 'APT-Report-Issue@usace.army.mil'
+        subject = 'Antecedent Precipitation Tool Error Log'
         attachmentPath = self.Log
         outlookpath2doc = None
         for root, directories, filenames in os.walk('C:\\Program Files (x86)\\Microsoft Office'):
@@ -245,7 +265,19 @@ class PrintLog(object):
             command = ' '.join([outlookpath2doc, compose, recipients, attachment])
             subprocess.Popen(command, shell=False, stdout=subprocess.PIPE)
         else:
-            print("Microsoft Outlook not found on this machine. Cannot send message.")
+            self.send_log_no_outlook()
+
+    def send_log_no_outlook(self):
+        """Opens Error Log and asks the user to transmit it with their error report"""
+        print("Microsoft Outlook not found on this machine. Cannot create message automatically.")
+        print(' -Opening error log for user to transmit manually...')
+        error_log_path = self.write_error_log()
+        subprocess.Popen(error_log_path, shell=True)
+        print(' -Please email this error log to "APT-Report-Issue@usace.army.mil" to assist with your error report.')
+        print(' ')
+        print('Ready for new input.')
+        print(' ')
+
     def print_title(self, title):
         if self.print_length < 81:
             outer_spaces = 0
@@ -331,10 +363,4 @@ class PrintLog(object):
 
 if __name__ == '__main__':
     log = PrintLog()
-    log.TimeTest(35, "Test_Seconds")
-    log.TimeTest(1550, "Test_Minutes")
-    log.TimeTest(5101, "HoursTest1")
-    log.TimeTest(9800, "HoursTest2")
-    log.TimeTest(157347, "HoursTest3")
-    log.TimeTest(90000, "DaysTest")
-    log.TimeTest(9073472, "DaysTest2")
+    
