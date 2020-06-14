@@ -22,7 +22,7 @@
 ##  ------------------------------- ##
 ######################################
 
-"""Calculates and stores all dates for the Antecedent Rainfall Calculator"""
+"""Calculates and stores all dates for the Antecedent Precipitation Tool"""
 
 import datetime
 
@@ -45,14 +45,14 @@ def rectify_inputs(year, month, day):
     return observation_datetime 
 
 class Main(object):
-    """Calculates and stores all dates for the Antecedent Rainfall Calculator"""
+    """Calculates and stores all dates for the Antecedent Precipitation Tool"""
     
     def __init__(self, year, month, day):
         self.observation_datetime = rectify_inputs(year, month, day)
         self.calculate()
     
     def calculate(self):
-        """Calculates all dates for the Antecedent Rainfall Calculator"""
+        """Calculates all dates for the Antecedent Precipitation Tool"""
         self.observation_date = self.observation_datetime.strftime('%Y-%m-%d')
         self.observation_day = self.observation_datetime.strftime('%d')
         self.observation_month = self.observation_datetime.strftime('%m')

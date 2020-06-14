@@ -14,22 +14,20 @@
 
 ######################################
 ##  ------------------------------- ##
-##          get_files.py            ##
+##          get_items.py            ##
 ##  ------------------------------- ##
 ##     Written by: Jason Deters     ##
 ##  ------------------------------- ##
-##    Last Edited on: 2020-05-27    ##
+##    Last Edited on: 2020-06-11    ##
 ##  ------------------------------- ##
 ######################################
 
 # Import Standard Libraries
 import os
 import sys
-import urllib3
 import requests
 import time
 import zipfile
-import subprocess
 
 # Find module path
 MODULE_PATH = os.path.dirname(os.path.realpath(__file__))
@@ -61,9 +59,7 @@ def check_local_version(version_local_path):
     return(local_version)
 
 def check_web_version(version_url):
-    """Uses urllib3 to check the first line of a text file at a URL"""
-#    http = urllib3.PoolManager(cert_reqs='CERT_REQUIRED')
-#    response = http.request('GET', version_url)
+    """Uses requests to check the first line of a text file at a URL"""
     response = requests.get(version_url)
     time.sleep(.1)
     web_version = float(response.text)
@@ -88,12 +84,14 @@ def extract_to_folder(zip_file, output_folder, pwd=None):
                 except Exception:
                     pass
 
+
 def sizeof_fmt(num, suffix='B'):
     for unit in [' ', 'K', 'M', 'G', 'T', 'P', 'E', 'Z']:
         if abs(num) < 1024.0:
             return "{:6.2f} {}{}".format(num, unit, suffix)
         num /= 1024.0
     return "{:6.2f} {}{}".format(num, 'Y', suffix)
+
 
 def ensure_file_exists(file_url, local_file_path, local_check_file=None,
                        version_url=None, version_local_path=None, minimum_size=None,
@@ -187,7 +185,7 @@ def ensure_file_exists(file_url, local_file_path, local_check_file=None,
 
 def get_only_newer_version(file_url, local_file_path, local_check_file=None,
                            version_url=None, version_local_path=None, minimum_size=None,
-                           extract_path=None, extract_pwd=None, launch_downloader=False):
+                           extract_path=None, extract_pwd=None):
     """Checks for file and version, downloads if necessary"""
     download = False
     local_version = 0
@@ -217,12 +215,6 @@ def get_only_newer_version(file_url, local_file_path, local_check_file=None,
                     pass
                 download = True
     if download is True:
-        if launch_downloader is True:
-            module_folder = os.path.dirname(os.path.realpath(__file__))
-            root_folder = os.path.split(module_folder)[0]
-            downloader_path = '{}\\Download the Antecedent Rainfall Calculator.exe'.format(root_folder)
-            subprocess.Popen(downloader_path, shell=True)
-            sys.exit()
         # Ensure download directory exists
         try:
             os.makedirs(download_dir)

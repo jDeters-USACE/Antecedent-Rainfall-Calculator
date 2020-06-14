@@ -25,7 +25,7 @@
 """
 Downloads, updates, and querries climdiv data from NOAA
 """
-from __future__ import (print_function, absolute_import)  # Python 3 support
+#from __future__ import (print_function, absolute_import)  # Python 3 support
 
 # Import Standard Libraries
 import os
@@ -66,13 +66,6 @@ ROOT_FOLDER = os.path.split(MODULE_FOLDER)[0]
 # Find clim_div folder
 CLIM_DIV_FOLDER = u'{}\\GIS\\climdiv'.format(ROOT_FOLDER)
 
-def ensure_dir(folder):
-    """Ensures entire directory structure given exists"""
-    try:
-        os.makedirs(folder)
-    except Exception:
-        pass
-# End of ensure_dir function
 
 def delete_read_only(file_path):
     """Ensures Windows Read-Only status does not interrupt os.remove function"""
@@ -95,7 +88,11 @@ def sizeof_fmt(num, suffix='B'):
 def ensure_current_pdsidv_file():
     """Checks that the newest procdate.txt corresponds with the current pdsidv file"""
     download = False
-    ensure_dir(CLIM_DIV_FOLDER)
+    # Ensures CLIM_DIV_FOLDER exists
+    try:
+        os.makedirs(CLIM_DIV_FOLDER)
+    except Exception:
+        pass
     base_url = 'https://www1.ncdc.noaa.gov/pub/data/cirs/climdiv'
     proc_date_url = '{}/procdate.txt'.format(base_url)
     # Try to avoid checking the server, if possible (New file published on 4th of the month)
@@ -180,9 +177,9 @@ def get_clim_div(lat, lon):
     clim_div_shapefile = '{}\\GIS.OFFICIAL_CLIM_DIVISIONS.shp'.format(CLIM_DIV_FOLDER)
     feature_attribute_to_query = "CLIMDIV"
     clim_div = query_shapefile_at_point.check(lat=lat,
-                                                lon=lon,
-                                                shapefile=clim_div_shapefile,
-                                                field_name=feature_attribute_to_query)
+                                              lon=lon,
+                                              shapefile=clim_div_shapefile,
+                                              field_name=feature_attribute_to_query)
     if len(clim_div) < 4:
         clim_div = '0{}'.format(clim_div)
     return clim_div

@@ -23,7 +23,7 @@
 ##  ------------------------------- ##
 ######################################
 
-""" This code provides the subprocess minions for the Antecedent Rainfall Calculator """
+""" This code provides the subprocess minions for the Antecedent Precipitation Tool """
 
 import os
 import sys

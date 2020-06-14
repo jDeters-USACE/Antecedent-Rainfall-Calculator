@@ -22,7 +22,7 @@
 ##  ------------------------------- ##
 ######################################
 
-"""Gets Rainfall Forecast data to plot on Antecedent Rainfall Calculator output figure"""
+"""Gets Rainfall Forecast data to plot on Antecedent Precipitation Tool output figure"""
 
 from __future__ import (print_function, absolute_import)  # Python 3 support
 
@@ -85,7 +85,7 @@ def get_json_multiple_ways(url=None):
         L.Write('    ----------------------------------')
 
 class EightDayForecast(object):
-    """Gets Rainfall Forecast data to plot on Antecedent Rainfall Calculator output figure"""
+    """Gets Rainfall Forecast data to plot on Antecedent Precipitation Tool output figure"""
 
     def __init__(self, lat, lon):
         self.lat = lat

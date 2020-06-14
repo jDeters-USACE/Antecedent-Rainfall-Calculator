@@ -16,13 +16,13 @@
 ##  ------------------------------- ##
 ##    query_shapefile_at_point.py   ##
 ##  ------------------------------- ##
-##      Copyright: Jason Deters     ##
+##      Written by: Jason Deters     ##
 ##  ------------------------------- ##
-##    Last Edited on: 2020-05-27    ##
+##    Last Edited on: 2020-06-11    ##
 ##  ------------------------------- ##
 ######################################
 
-# Grabbed from
+# Originally sourced from
 # https://stackoverflow.com/questions/7861196/check-if-a-geopoint-with-latitude-and-longitude-is-within-a-shapefile/13433127#13433127
 
 # Import Standard Libraries
