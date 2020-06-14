@@ -103,10 +103,6 @@ def ensure_arc_exe():
     module_folder = os.path.dirname(os.path.realpath(__file__))
     root_folder = os.path.split(module_folder)[0]
     local_file_path = '{}\\arc_ex.exe'.format(root_folder)
-    try:
-        os.remove(local_file_path)
-    except Exception:
-        pass
     file_url = 'https://github.com/jDeters-USACE/Antecedent-Rainfall-Calculator/raw/master/update/arc_ex.exe'
     local_version_file = '{}\\versions\\arc_ex_version.txt'.format(root_folder)
     web_version_url = 'https://raw.githubusercontent.com/jDeters-USACE/Antecedent-Rainfall-Calculator/master/versions/arc_ex_version.txt'
@@ -119,10 +115,6 @@ def ensure_antecdent_precipitation_tool_exe():
     module_folder = os.path.dirname(os.path.realpath(__file__))
     root_folder = os.path.split(module_folder)[0]
     local_file_path = '{}\\Antecedent Precipitation Tool.exe'.format(root_folder)
-    try:
-        os.remove(local_file_path)
-    except Exception:
-        pass
     file_url = 'https://github.com/jDeters-USACE/Antecedent-Rainfall-Calculator/raw/master/update/Antecedent%20Precipitation%20Tool.exe'
     local_version_file = local_version_file = '{}\\versions\\dl_version.txt'.format(root_folder)
     web_version_url = 'https://raw.githubusercontent.com/jDeters-USACE/Antecedent-Rainfall-Calculator/master/versions/dl_version.txt'
