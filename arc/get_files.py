@@ -167,7 +167,7 @@ def ensure_file_exists(file_url, local_file_path, local_check_file=None,
         if extract_path is None:
             extracted = ''
         else:
-            extracted = ' and Extracting '
+            extracted = 'and Extracting '
             log.Wrap('    Extracting package to target directory...')
             extract_to_folder(zip_file=local_file_path,
                               output_folder=extract_path,
@@ -180,7 +180,7 @@ def ensure_file_exists(file_url, local_file_path, local_check_file=None,
         if version_url is not None:
             with open(version_local_path, 'w') as version_file:
                 version_file.write('{}'.format(web_version))
-        log.Time(dl_start, 'Downloading{}{}'.format(extracted, file_name))
+        log.Time(dl_start, 'Downloading {}{}'.format(extracted, file_name))
     return
 
 def get_only_newer_version(file_url, local_file_path, local_check_file=None,
