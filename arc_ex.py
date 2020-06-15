@@ -29,6 +29,7 @@ import multiprocessing
 
 # Import Custom Libraries
 import arc.ant_GUI
+import arc.get_all
 
 
 TITLE = """
@@ -54,6 +55,7 @@ TITLE = """
 
 """
 
+ROOT_FOLDER = os.path.dirname(os.path.realpath(__file__))
 
 def main():
     print(TITLE)
@@ -61,6 +63,11 @@ def main():
     APP = arc.ant_GUI.Main()
     APP.run()
 
+def ensure_all():
+    arc.get_all.ensure_antecdent_precipitation_tool_exe()
+    arc.get_all.ensure_images()
+
 if __name__ == '__main__':
     multiprocessing.freeze_support()
+    ensure_all()
     main()
