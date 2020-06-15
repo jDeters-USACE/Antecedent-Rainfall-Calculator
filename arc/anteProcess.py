@@ -1275,7 +1275,7 @@ class Main(object):
         plt.ion() # MAKES PLOT.SHOW() NON-BLOCKING
         fig = plt.figure(figsize=(17, 11))
         fig.set_facecolor('0.77')
-        fig.set_dpi(150)
+        fig.set_dpi(140)
         if self.data_type == 'PRCP':
         #    if num_stations_used < 14:
             ax1 = plt.subplot2grid((9, 10), (0, 0), colspan=10, rowspan=6)
@@ -1294,7 +1294,7 @@ class Main(object):
             except:
                 logo_file = os.path.join(sys.prefix, 'images\\RD_1_0.png')
                 logo = plt.imread(logo_file)
-            img = fig.figimage(X=logo, xo=125, yo=25)
+            img = fig.figimage(X=logo, xo=118, yo=20)
         else:
             ax1 = plt.subplot2grid((9, 10), (0, 0), colspan=10, rowspan=7)
             ax2 = plt.subplot2grid((9, 10), (7, 3), colspan=7, rowspan=2)
