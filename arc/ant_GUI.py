@@ -64,6 +64,7 @@ except Exception:
     import check_usa
     import watershed_summary
     import help_window
+    import get_all
     TEST = os.path.exists('{}\\Python Scripts'.format(ROOT))
     if TEST:
         sys.path.append('{}\\Python Scripts'.format(ROOT))
@@ -203,11 +204,11 @@ class Main(object):
         self.plus_button = tkinter.ttk.Button(self.dates_frame, command=self.add_date, image=self.PLUS_IMAGE)
         self.minus_button = tkinter.ttk.Button(self.dates_frame, image=self.minus_image, command=self.minus_function)
 
-#        #---SEPARATOR---#
-#        separator = tkinter.ttk.Separator(self.master, orient="horizontal", style="Line.TSeparator")
-#        separator.grid(row=98, sticky='ew', columnspan=3, pady=0, padx=0)
-#        self.separators.append(separator)
-#        self.row += 1
+        #---SEPARATOR---#
+        separator = tkinter.ttk.Separator(self.master, orient="horizontal", style="Line.TSeparator")
+        separator.grid(row=98, sticky='ew', columnspan=3, pady=0, padx=0)
+        self.separators.append(separator)
+        self.row += 1
 
         #---BOTTOM ROW BUTTONS---#
         self.BUTTON_CALCULATE = tkinter.ttk.Button(self.master, text='Calculate', command=self.calculate_and_graph)
@@ -270,7 +271,6 @@ class Main(object):
         # start mainloop
         self.master.mainloop()
     # End of run method
-
 
     def switch_batch_style(self):
         current_style = self.batch_style_string_var.get()
@@ -467,40 +467,13 @@ class Main(object):
     def watershed_selection(self, event):
         """Acts on the self.watershed_scope_menu drop-down selection"""
         watershed_scale = self.watershed_scope_string_var.get()
-        current_style = self.batch_style_string_var.get()
-        if watershed_scale == 'Single Point':
-            # Remove Custom Watershed Label and Entry Box
-            self.LABEL_CUSTOM_WATERSHED_NAME.grid_forget()
-            self.ENTRY_CUSTOM_WATERSHED_NAME.grid_forget()
-            self.LABEL_CUSTOM_WATERSHED_FILE.grid_forget()
-            self.ENTRY_CUSTOM_WATERSHED_FILE.grid_forget()
-            self.BUTTON_BROWSE_SHAPEFILE.grid_forget()
-            self.BUTTON_BATCH.config(state='normal')
-            if current_style == 'Disabled for Watershed Scales':
-                self.batch_style_string_var.set('Switch to Date Range')
-                self.plus_button.grid(row=4, column=5, sticky='e', padx=1)
-        else: # Watershed Analysis
-            current_style = self.batch_style_string_var.get()
-            if current_style != 'Switch to Date Range':
-                self.wipe_date_elements()
-                self.setup_unique_dates()
-                self.plus_button.grid_forget()  # MULTIPLE DATES NOT ALLOWED FOR WATERSHED YET
-            else: # Reduce to 1 Date Entry Box
-                num_rows = len(self.date_entry_boxes)
-                while num_rows > 1:
-                    self.minus_function()
-                    num_rows = len(self.date_entry_boxes)
-            self.batch_style_string_var.set('Disabled for Watershed Scales')
-            self.BUTTON_BATCH.config(state='disabled')
-            self.upper_label_unique.config(text='Run {} analysis for a single date'.format(watershed_scale))
-            self.upper_label_unique.grid(row=0, column=0, columnspan=7, sticky='ew', padx=90)
         if watershed_scale == 'Custom Polygon':
             # Grid Custom Watershed Entry Box
-            self.LABEL_CUSTOM_WATERSHED_NAME.grid(row=94, sticky='sw', padx=5, pady=3, columnspan=5)
-            self.ENTRY_CUSTOM_WATERSHED_NAME.grid(row=95, padx=5, sticky='ew', columnspan=6)
-            self.LABEL_CUSTOM_WATERSHED_FILE.grid(row=96, sticky='sw', padx=5, pady=3, columnspan=5)
-            self.ENTRY_CUSTOM_WATERSHED_FILE.grid(row=97, padx=5, sticky='ew', columnspan=6)
-            self.BUTTON_BROWSE_SHAPEFILE.grid(row=97, column=6, padx=4, pady=1)
+            self.LABEL_CUSTOM_WATERSHED_NAME.grid(row=94, sticky='sw', padx=5, pady=3, columnspan=3)
+            self.ENTRY_CUSTOM_WATERSHED_NAME.grid(row=95, padx=5, sticky='ew', columnspan=3)
+            self.LABEL_CUSTOM_WATERSHED_FILE.grid(row=96, sticky='sw', padx=5, pady=3, columnspan=3)
+            self.ENTRY_CUSTOM_WATERSHED_FILE.grid(row=97, padx=5, sticky='ew', columnspan=3)
+            self.BUTTON_BROWSE_SHAPEFILE.grid(row=97, column=2, padx=4, pady=1, sticky='e')
         else:
             # Remove Custom Watershed Label and Entry Box
             self.LABEL_CUSTOM_WATERSHED_NAME.grid_forget()
@@ -682,8 +655,12 @@ class Main(object):
             params.append(radio)
             params.append(fixed_y_max)
             params.append(forecast_enabled)
-            self.calculate_or_add_batch(True, params)
-        self.calculate_or_add_batch(False, params)
+            if watershed_scale == 'Single Point':
+                self.calculate_or_add_batch(True, params)
+            else:
+                self.calculate_or_add_batch(False, params)
+        if watershed_scale == 'Single Point':
+            self.calculate_or_add_batch(False, params)
     # End get_inputs_unique method
 
     def get_inputs_range(self):
@@ -751,11 +728,17 @@ class Main(object):
             params.append(radio)
             params.append(fixed_y_max)
             params.append(forecast_enabled)
+            if watershed_scale == 'Single Point':
+                self.calculate_or_add_batch(True, params)
+            else:
+                self.calculate_or_add_batch(False, params)
+
             self.calculate_or_add_batch(True, params)
             # Advance 1 day
             test_datetime = test_datetime + datetime.timedelta(days=1)
         # Submit final request
-        self.calculate_or_add_batch(False, params)
+        if watershed_scale == 'Single Point':
+            self.calculate_or_add_batch(False, params)
 
     def get_inputs_csv(self):
         """Reads batch inputs from CSV and runs them"""
@@ -824,8 +807,12 @@ class Main(object):
             params.append(radio)
             params.append(fixed_y_max)
             params.append(forecast_enabled)
-            self.calculate_or_add_batch(True, params)
-        self.calculate_or_add_batch(False, params)
+            if watershed_scale == 'Single Point':
+                self.calculate_or_add_batch(True, params)
+            else:
+                self.calculate_or_add_batch(False, params)
+        if watershed_scale == 'Single Point':
+            self.calculate_or_add_batch(False, params)    
     # End batch_from_csv method
 
 

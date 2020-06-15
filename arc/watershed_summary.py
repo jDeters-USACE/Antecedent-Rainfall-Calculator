@@ -30,6 +30,7 @@ import datetime
 import numpy
 import matplotlib.pyplot as plt
 import pylab
+import matplotlib.patheffects as path_effects
 
 
 
@@ -176,21 +177,45 @@ def create_summary(site_lat, site_long, observation_date, geographic_scope, huc,
     
     # Construct Figure
     #plt.ion() # MAKES PLOT.SHOW() NON-BLOCKING
-    fig = plt.figure(figsize=(15, 8.5))
+    fig = plt.figure(figsize=(13.5, 8.5))
     fig.set_facecolor('0.90')
     ax1 = plt.subplot2grid((20, 9), (3, 1), colspan=4, rowspan=2)
     ax2 = plt.subplot2grid((20, 9), (6, 1), colspan=4, rowspan=2)
     ax3 = plt.subplot2grid((20, 9), (9, 1), colspan=4, rowspan=2)
     ax4 = plt.subplot2grid((20, 9), (12, 0), colspan=9, rowspan=9)
-    ax5 = plt.subplot2grid((20, 9), (3, 5), colspan=2, rowspan=7)
+    ax5 = plt.subplot2grid((20, 18), (3, 11), colspan=4, rowspan=7)
+
+    params = {"ytick.color" : "w",
+              "xtick.color" : "w",
+              "axes.labelcolor" : "w",
+              "axes.edgecolor" : "w"}
+    plt.rcParams.update(params)
 
     #pie_colors = [light_red, light_green, light_blue]
     patchyes, texts, autotexts = ax5.pie(pie_sizes,
-                                        colors=pie_colors,
-                                        labels=pie_labels,
-                                        autopct='%1.1f%%',
-                                        shadow=True,
-                                        startangle=90)
+                                         colors=pie_colors,
+                                         labels=pie_labels,
+                                         autopct='%1.1f%%',
+                                         shadow=True,
+                                         startangle=90)
+    for autotext in autotexts:
+        autotext.set_color('white')
+        autotext.set_path_effects([path_effects.Stroke(linewidth=3, foreground='black'), path_effects.Normal()])
+    
+    for text in texts:
+        text.set_color('white')
+        text.set_path_effects([path_effects.Stroke(linewidth=3, foreground='black'), path_effects.Normal()])
+
+    # Add Logo
+    fig.set_dpi(135)
+    import os
+    MODULE_PATH = os.path.dirname(os.path.realpath(__file__))
+    ROOT = os.path.split(MODULE_PATH)[0]
+    logoFile = ROOT + "\\GUI Images\\Traverse_80%_1920.png"
+    logo = plt.imread(logoFile)
+    img = fig.figimage(X=logo, xo=0, yo=0)
+
+
 #    for text in texts:
 #        text.set_color('grey')
 #    for autotext in autotexts:
@@ -210,12 +235,19 @@ def create_summary(site_lat, site_long, observation_date, geographic_scope, huc,
     ax4.axis('tight')
     ax5.axis('tight')
 
+    from matplotlib import patheffects
+
     # Add Axis Titles
-    fig.suptitle('Antecedent Precipitation Tool - Watershed Sampling Summary', fontsize=17)
-    ax1.set_title('User Inputs')
-    ax2.set_title('Intermediate Data')
-    ax3.set_title('Preliminary Result')
-    ax4.set_title('Sampling Point Breakdown')
+    title_text_object = fig.suptitle('Antecedent Precipitation Tool v.1.0 - Watershed Sampling Summary', fontsize=17, color='white')
+    title_text_object.set_path_effects([path_effects.Stroke(linewidth=3, foreground='black'), path_effects.Normal()])
+    ax1_title_object = ax1.set_title('User Inputs', color='white')
+    ax1_title_object.set_path_effects([path_effects.Stroke(linewidth=3, foreground='black'), path_effects.Normal()])
+    ax2_title_object = ax2.set_title('Intermediate Data', color='white')
+    ax2_title_object.set_path_effects([path_effects.Stroke(linewidth=3, foreground='black'), path_effects.Normal()])
+    ax3_title_object = ax3.set_title('Preliminary Result', color='white')
+    ax3_title_object.set_path_effects([path_effects.Stroke(linewidth=3, foreground='black'), path_effects.Normal()])
+    ax4_title_object = ax4.set_title('Sampling Point Breakdown', color="white")
+    ax4_title_object.set_path_effects([path_effects.Stroke(linewidth=3, foreground='black'), path_effects.Normal()])
 
     # Create Inputs Table
     inputs_table_values = [
@@ -233,10 +265,10 @@ def create_summary(site_lat, site_long, observation_date, geographic_scope, huc,
 
     # Plot inputs_table
     inputs_table = ax1.table(cellText=inputs_table_values,
-                            cellColours=inputs_table_colors,
-                            colWidths=[0.25, 0.355],
-                            cellLoc='center',
-                            loc='lower center')
+                             cellColours=inputs_table_colors,
+                             colWidths=[0.27, 0.355],
+                             cellLoc='center',
+                             loc='lower center')
 
     inputs_table.auto_set_font_size(False)
     inputs_table.set_fontsize(12)
@@ -260,7 +292,7 @@ def create_summary(site_lat, site_long, observation_date, geographic_scope, huc,
     # Plot intermediate_data_table
     intermediate_data_table = ax2.table(cellText=intermediate_table_values,
                                         cellColours=intermediate_table_colors,
-                                        colWidths=[0.355, 0.22],
+                                        colWidths=[0.40, 0.225],
                                         cellLoc='center',
                                         loc='lower center')
     intermediate_data_table.auto_set_font_size(False)
@@ -282,7 +314,7 @@ def create_summary(site_lat, site_long, observation_date, geographic_scope, huc,
     # Plot preliminary determination table
     prelim_determ_table = ax3.table(cellText=prelim_determ_table_values,
                                     cellColours=prelim_determ_table_colors,
-                                    colWidths=[0.53, 0.265],
+                                    colWidths=[0.58, 0.29],
                                     cellLoc='center',
                                     loc='center')
     prelim_determ_table.auto_set_font_size(False)
@@ -292,7 +324,7 @@ def create_summary(site_lat, site_long, observation_date, geographic_scope, huc,
     # Plot Sampling Points Breakdown Table
     sampling_point_table = ax4.table(cellText=sampling_points_table_values,
                                     cellColours=sampling_points_table_colors,
-                                    colWidths=[0.19, 0.21, 0.145, 0.175, 0.09],
+                                    colWidths=[0.21, 0.23, 0.16, 0.175, 0.08],
                                     cellLoc='center',
                                     loc='upper center')
     sampling_point_table.auto_set_font_size(False)
@@ -303,7 +335,9 @@ def create_summary(site_lat, site_long, observation_date, geographic_scope, huc,
     today_datetime = datetime.datetime.today()
     today_str = today_datetime.strftime('%Y-%m-%d')
     # Add Generated on today's date text
-    date_generated_text = ax1.text(0.027, 0.153, "Generated on {}".format(today_str), size=10)
+    #date_generated_text = ax1.text(0.027, 0.153, "Generated on {}".format(today_str), size=10, color='white')
+    date_generated_text = ax1.text(0.025, 0.153, "Generated on {}".format(today_str), size=10, color='white')
+    date_generated_text.set_path_effects([path_effects.Stroke(linewidth=3, foreground='black'), path_effects.Normal()])
 
     # Remove space between subplots
     plt.subplots_adjust(wspace=0.00,
@@ -374,23 +408,23 @@ if __name__ == '__main__':
         (10,"Normal Conditions","Wet Season","Mild drought (2020-01)"),
         (8,"Drier than Normal","Wet Season","Mild drought (2020-01)"),
         (10,"Normal Conditions","Wet Season","Mild drought (2020-01)"),
-        (10,"Normal Conditions","Wet Season","Mild drought (2020-01)"),
-        (8,"Drier than Normal","Wet Season","Mild drought (2020-01)"),
-        (8,"Drier than Normal","Wet Season","Mild drought (2020-01)"),
-        (8,"Drier than Normal","Wet Season","Mild drought (2020-01)"),
-        (10,"Normal Conditions","Wet Season","Mild drought (2020-01)"),
-        (11,"Normal Conditions","Wet Season","Mild drought (2020-01)"),
-        (8,"Drier than Normal","Wet Season","Mild drought (2020-01)"),
-        (8,"Drier than Normal","Wet Season","Mild drought (2020-01)"),
+        (10,"Normal Conditions","Wet Season","Not available"),
+        (8,"Drier than Normal","Wet Season","Extreme wetness (2020-01)"),
+        (8,"Drier than Normal","Wet Season","Severe wetness (2020-01)"),
         (8,"Drier than Normal","Wet Season","Mild drought (2020-01)"),
         (10,"Normal Conditions","Wet Season","Mild drought (2020-01)"),
         (11,"Normal Conditions","Wet Season","Mild drought (2020-01)"),
+        (8,"Drier than Normal","Wet Season","Mild drought (2020-01)"),
+        (8,"Drier than Normal","Wet Season","Mild drought (2020-01)"),
+        (8,"Drier than Normal","Wet Season","Incipient wetness (2020-01)"),
+        (10,"Normal Conditions","Wet Season","Mild drought (2020-01)"),
+        (11,"Normal Conditions","Wet Season","Mild drought (2020-01)"),
         (10,"Normal Conditions","Wet Season","Mild drought (2020-01)"),
         (10,"Normal Conditions","Wet Season","Mild drought (2020-01)"),
         (8,"Drier than Normal","Wet Season","Mild drought (2020-01)"),
         (11,"Normal Conditions","Wet Season","Mild drought (2020-01)"),
         (8,"Drier than Normal","Wet Season","Mild drought (2020-01)"),
-        (10,"Normal Conditions","Wet Season","Mild drought (2020-01)"),
+        (10,"Normal Conditions","Wet Season","Incipient drought (2020-01)"),
         (8,"Drier than Normal","Wet Season","Mild drought (2020-01)"),
         (8,"Drier than Normal","Wet Season","Mild drought (2020-01)"),
         (10,"Normal Conditions","Wet Season","Mild drought (2020-01)"),
@@ -433,6 +467,22 @@ if __name__ == '__main__':
         (8,"Drier than Normal","Wet Season","Mild drought (2020-01)")
     ]
 
+    # Save output as PDF
+    import os
+    WATERSHED_SUMMARY_PATH = 'C:\\Temp\\test.pdf'
+    fig_exists = os.path.exists(WATERSHED_SUMMARY_PATH)
+    fig_num = 1
+    while fig_exists:
+        try:
+            os.remove(WATERSHED_SUMMARY_PATH)
+            break
+        except Exception:
+            WATERSHED_SUMMARY_PATH = 'C:\\Temp\\test{}.pdf'.format(fig_num)
+            fig_num += 1
+            fig_exists = os.path.exists(WATERSHED_SUMMARY_PATH)
+
+    # Don't save
+#    WATERSHED_SUMMARY_PATH = None
 
     create_summary(site_lat="38.4008283",
                    site_long="-120.8286800",
@@ -441,6 +491,8 @@ if __name__ == '__main__':
                    huc='180400120000',
                    huc_size=1266.29,
                    results_list=RESULTS_LIST,
-                   watershed_summary_path=None)
-
-#                   watershed_summary_path=r'C:\Users\L2RCSJ9D\Desktop\Antecedent\Rainfall\~HUC\8\18040012\2020-02-10 - HUC 18040012 - Summary.pdf')
+                   watershed_summary_path=WATERSHED_SUMMARY_PATH)
+    
+    if WATERSHED_SUMMARY_PATH:
+        import subprocess
+        subprocess.Popen(WATERSHED_SUMMARY_PATH, shell=True)

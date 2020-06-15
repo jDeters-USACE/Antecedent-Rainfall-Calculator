@@ -314,11 +314,11 @@ class Main(object):
         if self.save_folder is not None:
             # Create PDF output Folder
             if self.data_type == 'PRCP':
-                self.folderPath = self.save_folder + "\\Antecedent\\Rainfall\\" + str(self.site_lat)+ ', ' + str(self.site_long)
+                self.folderPath = self.save_folder + "\\v_1_0\\" + str(self.site_lat)+ ', ' + str(self.site_long)
             if self.data_type == 'SNOW':
-                self.folderPath = self.save_folder + "\\Antecedent\\Snowfall\\" + str(self.site_lat)+ ', ' + str(self.site_long)
+                self.folderPath = self.save_folder + "\\Snowfall\\" + str(self.site_lat)+ ', ' + str(self.site_long)
             if self.data_type == 'SNWD':
-                self.folderPath = self.save_folder + "\\Antecedent\\Snow Depth\\" + str(self.site_lat)+ ', ' + str(self.site_long)
+                self.folderPath = self.save_folder + "\\Snow Depth\\" + str(self.site_lat)+ ', ' + str(self.site_long)
             folder_exists = os.path.exists(self.folderPath)
             if not folder_exists:
                 self.log.Wrap('Creating PDF output directory ({})...'.format(self.folderPath))
@@ -1275,6 +1275,7 @@ class Main(object):
         plt.ion() # MAKES PLOT.SHOW() NON-BLOCKING
         fig = plt.figure(figsize=(17, 11))
         fig.set_facecolor('0.77')
+        fig.set_dpi(150)
         if self.data_type == 'PRCP':
         #    if num_stations_used < 14:
             ax1 = plt.subplot2grid((9, 10), (0, 0), colspan=10, rowspan=6)
@@ -1288,12 +1289,12 @@ class Main(object):
         #        ax4 = plt.subplot2grid((9, 10), (7, 3), colspan=7, rowspan=1)
             # Add Logo
             try:
-                logo_file = ROOT + "\\GUI Images\\RD.png"
+                logo_file = ROOT + "\\GUI Images\\RD_1_0.png"
                 logo = plt.imread(logo_file)
             except:
-                logo_file = os.path.join(sys.prefix, 'images\\RD.png')
+                logo_file = os.path.join(sys.prefix, 'images\\RD_1_0.png')
                 logo = plt.imread(logo_file)
-            img = fig.figimage(X=logo, xo=0.35, yo=0.85)
+            img = fig.figimage(X=logo, xo=125, yo=25)
         else:
             ax1 = plt.subplot2grid((9, 10), (0, 0), colspan=10, rowspan=7)
             ax2 = plt.subplot2grid((9, 10), (7, 3), colspan=7, rowspan=2)
