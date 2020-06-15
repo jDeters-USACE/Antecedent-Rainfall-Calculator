@@ -2,6 +2,7 @@ import os
 import sys
 import tkinter
 from tkinter import ttk
+import time
 
 import subprocess
 import webbrowser
@@ -10,10 +11,12 @@ import webbrowser
 # Custom Libraries
 try:
     from . import get_all
+    from . import get_files
     from .utilities import JLog
 except Exception:
     # Maintains compatability with previous non-compiled versions
     import get_all
+    import get_files
     MODULE_PATH = os.path.dirname(os.path.realpath(__file__))
     ROOT = os.path.split(MODULE_PATH)[0]
     TEST = os.path.exists('{}\\Python Scripts'.format(ROOT))
@@ -109,12 +112,12 @@ class Main(object):
                            title='How to read the output of a single-point analysis:',
                            pdf_local_path="",
                            pdf_url="",
-                           youtube_url="www.youtube.com")
+                           youtube_url="")
         self.add_reference(frame='Usage-Single',
                            title='How to generate a single-point analysis for a given date:',
-                           pdf_local_path="",
-                           pdf_url="",
-                           youtube_url="www.google.com")
+                           pdf_local_path="{}\\help\\APT Walkthrough - Single Point - Single Date.pdf".format(root_folder),
+                           pdf_url="https://github.com/jDeters-USACE/Antecedent-Rainfall-Calculator/raw/master/help/APT%20Walkthrough%20-%20Single%20Point%20-%20Single%20Date.pdf",
+                           youtube_url="")
         self.add_reference(frame='Usage-Single',
                            title='How to generate a single-point analysis for several dates at once:',
                            pdf_local_path="",
@@ -224,18 +227,20 @@ class Main(object):
         self.button_labels.append(label)
         # Create/Grid PDF BUTTON
         if pdf_local_path is not None:
-            def open_pdf_reference(pdf_local_path, pdf_url):
-#DEV ONLY
-                # Define File Path
-                # Ensure Exists
-                # Popen PDF
-#DEV ONLY
+            def open_pdf_reference():
+                exists = os.path.exists(pdf_local_path)
+                if not exists:
+                    get_files.ensure_file_exists(file_url=pdf_url,
+                                                 local_file_path=pdf_local_path)
+                pdf_name = os.path.split(pdf_local_path)[1]
+                print('Opening {}...'.format(pdf_name))
+                time.sleep(2)
+                subprocess.Popen(pdf_local_path, shell=True)
                 print('')
                 print('Ready for new input.')
-                return
             pdf_button = ttk.Button(self.central_buttons_frame,
-                                        text='PDF Instructions',
-                                        command=open_pdf_reference)
+                                    text='PDF Instructions',
+                                    command=open_pdf_reference)
             pdf_button.grid(row=self.row, column=1, padx=10, pady=5, sticky='e')
             # Auto-disable before link provided
             if pdf_local_path == '':

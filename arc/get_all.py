@@ -89,7 +89,7 @@ def ensure_package():
         os.remove(local_file_path)
     except Exception:
         pass
-    file_url = 'https://www.spk.usace.army.mil/Portals/12/documents/regulatory/upload/APT/package/math_&_graphing_packages.zip'
+    file_url = 'https://www.spk.usace.army.mil/Portals/12/documents/regulatory/upload/APT/package/math_&_graphing_packages.zip?ver=2020-06-15'
     local_version_file = '{}\\versions\\package_version.txt'.format(root_folder)
     web_version_url = 'https://raw.githubusercontent.com/jDeters-USACE/Antecedent-Rainfall-Calculator/master/versions/package_version.txt'
     get_files.get_only_newer_version(file_url=file_url,
@@ -122,6 +122,75 @@ def ensure_antecdent_precipitation_tool_exe():
                                      local_file_path=local_file_path,
                                      version_url=web_version_url,
                                      version_local_path=local_version_file)
+
+def ensure_rd_1_0_png():
+    module_folder = os.path.dirname(os.path.realpath(__file__))
+    root_folder = os.path.split(module_folder)[0]
+    local_file_path = '{}\\images\\RD_1_0.png'.format(root_folder)
+    file_url = 'https://github.com/jDeters-USACE/Antecedent-Rainfall-Calculator/raw/master/images/RD_1_0.png'
+    exists = os.path.exists(local_file_path)
+    if not exists:
+        get_files.ensure_file_exists(file_url=file_url,
+                                     local_file_path=local_file_path)
+
+def ensure_traverse_80():
+    module_folder = os.path.dirname(os.path.realpath(__file__))
+    root_folder = os.path.split(module_folder)[0]
+    local_file_path = '{}\\images\\Traverse_80%_1920.png'.format(root_folder)
+    file_url = 'https://github.com/jDeters-USACE/Antecedent-Rainfall-Calculator/raw/master/images/Traverse_80%25_1920.png'
+    exists = os.path.exists(local_file_path)
+    if not exists:
+        get_files.ensure_file_exists(file_url=file_url,
+                                     local_file_path=local_file_path)
+
+def ensure_traverse_40():
+    module_folder = os.path.dirname(os.path.realpath(__file__))
+    root_folder = os.path.split(module_folder)[0]
+    local_file_path = '{}\\images\\Traverse_40%_503.gif'.format(root_folder)
+    file_url = 'https://github.com/jDeters-USACE/Antecedent-Rainfall-Calculator/raw/master/images/Traverse_40%25_503.gif'
+    exists = os.path.exists(local_file_path)
+    if not exists:
+        get_files.ensure_file_exists(file_url=file_url,
+                                     local_file_path=local_file_path)
+def ensure_minus():
+    module_folder = os.path.dirname(os.path.realpath(__file__))
+    root_folder = os.path.split(module_folder)[0]
+    local_file_path = '{}\\images\\Minus.gif'.format(root_folder)
+    file_url = 'https://github.com/jDeters-USACE/Antecedent-Rainfall-Calculator/raw/master/images/Minus.gif'
+    exists = os.path.exists(local_file_path)
+    if not exists:
+        get_files.ensure_file_exists(file_url=file_url,
+                                     local_file_path=local_file_path)
+
+def ensure_plus():
+    module_folder = os.path.dirname(os.path.realpath(__file__))
+    root_folder = os.path.split(module_folder)[0]
+    local_file_path = '{}\\images\\Plus.gif'.format(root_folder)
+    file_url = 'https://github.com/jDeters-USACE/Antecedent-Rainfall-Calculator/raw/master/images/Plus.gif'
+    exists = os.path.exists(local_file_path)
+    if not exists:
+        get_files.ensure_file_exists(file_url=file_url,
+                                     local_file_path=local_file_path)
+
+def ensure_question():
+    module_folder = os.path.dirname(os.path.realpath(__file__))
+    root_folder = os.path.split(module_folder)[0]
+    local_file_path = '{}\\images\\Question.gif'.format(root_folder)
+    file_url = 'https://github.com/jDeters-USACE/Antecedent-Rainfall-Calculator/raw/master/images/Question.gif'
+    exists = os.path.exists(local_file_path)
+    if not exists:
+        get_files.ensure_file_exists(file_url=file_url,
+                                     local_file_path=local_file_path)
+
+
+def ensure_images():
+    ensure_rd_1_0_png()
+    ensure_traverse_80()
+    ensure_traverse_40()
+    ensure_minus()
+    ensure_plus()
+    ensure_question()
+
 
 def main():
     ensure_package()

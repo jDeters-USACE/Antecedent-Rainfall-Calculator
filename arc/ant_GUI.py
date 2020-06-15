@@ -83,7 +83,6 @@ class Main(object):
     """GUI for the Antecedent Precipitation Tool"""
 
     def __init__(self):
-        get_all.ensure_antecdent_precipitation_tool_exe()
         self.row = 0
         self.separators = []
         self.date_separators = []
